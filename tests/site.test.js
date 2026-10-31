@@ -53,8 +53,8 @@ describe('constantes', () => {
       '#0055bf',
       '#3f3691',
       '#9fc3e9',
-      '#c870a0',
       '#ffffff',
+      '#c870a0',
     ]);
   });
 
