@@ -44,17 +44,16 @@ function makeTitle(rect = { left: 100, top: 200, width: 300, height: 100 }) {
 describe('constantes', () => {
   it('liste les couleurs du set Everyone is awesome', () => {
     expect(AWESOME_COLORS).toEqual([
-      '#b57edc',
-      '#e40303',
-      '#ff8c00',
-      '#ffed00',
-      '#008026',
-      '#004dff',
-      '#750787',
-      '#000000',
-      '#613915',
-      '#5bcefa',
-      '#f5a9b8',
+      '#05131d',
+      '#582a12',
+      '#c91a09',
+      '#fe8a18',
+      '#f2cd37',
+      '#4b9f4a',
+      '#0055bf',
+      '#3f3691',
+      '#9fc3e9',
+      '#c870a0',
       '#ffffff',
     ]);
   });
@@ -320,7 +319,7 @@ describe('init', () => {
     expect(document.body.classList.contains('awesome')).toBe(true);
     expect(title.style.color).toBe('');
     expect(document.body.style.background).toContain('linear-gradient');
-    expect(document.body.style.background).toContain('rgb(181, 126, 220)');
+    expect(document.body.style.background).toContain('rgb(5, 19, 29)');
   });
 
   it('ne change rien sans le Konami code complet', () => {

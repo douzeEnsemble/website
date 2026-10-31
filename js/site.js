@@ -1,15 +1,16 @@
+// Couleurs LEGO des 11 figurines du set 40516, de gauche à droite :
+// noir, marron, arc-en-ciel (rouge à violet), puis drapeau trans.
 export const AWESOME_COLORS = [
-  '#b57edc',
-  '#e40303',
-  '#ff8c00',
-  '#ffed00',
-  '#008026',
-  '#004dff',
-  '#750787',
-  '#000000',
-  '#613915',
-  '#5bcefa',
-  '#f5a9b8',
+  '#05131d',
+  '#582a12',
+  '#c91a09',
+  '#fe8a18',
+  '#f2cd37',
+  '#4b9f4a',
+  '#0055bf',
+  '#3f3691',
+  '#9fc3e9',
+  '#c870a0',
   '#ffffff',
 ];
 
