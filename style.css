@@ -168,3 +168,111 @@ body.awesome h1 {
   font-size: 0.8rem;
   opacity: 0.7;
 }
+
+.prestations {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 60rem;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: 4rem 1.25rem 2rem;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.prestations-intro {
+  max-width: 36rem;
+  margin: 1rem auto 0;
+  font-size: 1.15rem;
+}
+
+/* Une carte par prestation, aux couleurs arc-en-ciel du set Everyone is awesome. */
+.prestations-liste {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.prestation {
+  position: relative;
+  padding: 1.5rem;
+  border: 0.15rem solid #05131d;
+  border-radius: 1rem;
+  background: #c91a09;
+  color: #fff;
+}
+
+.prestation:nth-child(2) {
+  background: #fe8a18;
+  color: #05131d;
+}
+
+.prestation:nth-child(3) {
+  background: #4b9f4a;
+}
+
+.prestation:nth-child(4) {
+  background: #0055bf;
+}
+
+.prestation-numero {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  opacity: 0.3;
+}
+
+.prestation h2 {
+  margin: 0 3rem 0.75rem 0;
+  font-size: 1.3rem;
+}
+
+.prestation p {
+  margin: 0 0 1rem;
+  line-height: 1.45;
+}
+
+.prestation ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.prestation-point {
+  padding: 0.3rem 0 0.3rem 1.4rem;
+  border-top: 0.1rem solid rgb(255 255 255 / 25%);
+  background: no-repeat left 0.75em / 0.6rem 0.6rem
+    radial-gradient(circle, currentcolor 45%, transparent 50%);
+  font-size: 0.95rem;
+}
+
+.prestation:nth-child(2) .prestation-point {
+  border-top-color: rgb(5 19 29 / 20%);
+}
+
+.prestations-contact {
+  margin: 2rem 0 0;
+}
+
+.prestations-cta {
+  display: inline-block;
+  padding: 0.6em 1.4em;
+  border: 0.15rem solid #05131d;
+  border-radius: 2rem;
+  background: #f2cd37;
+  color: #05131d;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.prestations-cta:hover,
+.prestations-cta:focus-visible {
+  background: #05131d;
+  color: #f2cd37;
+}
