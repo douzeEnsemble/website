@@ -9,6 +9,7 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: #fff;
 }
 
 h1 {
@@ -23,4 +24,55 @@ body.awesome h1 {
   color: #fff;
   -webkit-text-stroke: 0.04em #000;
   paint-order: stroke fill;
+}
+
+/* Menu discret : en haut à droite, presque transparent, visible au survol.
+   Le mélange « difference » garde le texte lisible sur les fonds aléatoires. */
+.menu {
+  position: fixed;
+  top: 1rem;
+  right: 1.25rem;
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  mix-blend-mode: difference;
+  opacity: 0.35;
+  transition: opacity 0.2s;
+}
+
+.menu:hover,
+.menu:focus-within {
+  opacity: 1;
+}
+
+.menu ul {
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.menu a:hover,
+.menu a:focus-visible,
+.menu a[aria-current="page"] {
+  text-decoration: underline;
+}
+
+.contact {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.contact p {
+  margin: 1rem 0 0;
+  font-size: 4vw;
+}
+
+.contact-email {
+  color: inherit;
 }
