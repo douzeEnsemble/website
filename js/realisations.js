@@ -1,3 +1,5 @@
+import { AWESOME_COLORS } from './site.js';
+
 export const PROFILE_URL = 'https://github.com/RenaudDouze';
 export const REPOS_URL =
   'https://api.github.com/users/RenaudDouze/repos?sort=pushed&per_page=100';
@@ -27,10 +29,17 @@ export function selectProjects(repos, limit) {
     .slice(0, limit);
 }
 
-// Une carte par projet, chacune d'une teinte différente du cercle chromatique.
+// Texte sombre sur les couleurs claires, blanc sur les foncées (luminance
+// perçue, sur 255 000 pour rester en calcul entier).
+export function textColor(hex) {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  return 299 * r + 587 * g + 114 * b > 153000 ? '#05131d' : '#ffffff';
+}
+
+// Une carte par projet, aux couleurs du set LEGO Everyone is awesome, dans
+// l'ordre des figurines.
 export function renderProjects(list, projects) {
   const doc = list.ownerDocument;
-  const step = 360 / projects.length;
   const element = (tag, className, text) => {
     const el = doc.createElement(tag);
     el.className = className;
@@ -41,7 +50,9 @@ export function renderProjects(list, projects) {
     ...projects.map((project, i) => {
       const url = publishedUrl(project);
       const item = doc.createElement('li');
-      item.style.setProperty('--teinte', String(Math.round(i * step)));
+      const color = AWESOME_COLORS[i % AWESOME_COLORS.length];
+      item.style.setProperty('--fond', color);
+      item.style.setProperty('--texte', textColor(color));
       const link = doc.createElement('a');
       link.href = url;
       link.append(element('strong', 'carte-nom', project.name));

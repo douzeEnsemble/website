@@ -70,10 +70,24 @@ body.awesome h1 {
 
 .contact p {
   margin: 1rem 0 0;
-  font-size: 4vw;
+  font-size: 1.25rem;
 }
 
-.contact-email {
+.contact .contact-nom {
+  font-size: 2rem;
+}
+
+.contact-bouton {
+  padding: 0.4em 1em;
+  border: 0.15rem solid currentcolor;
+  border-radius: 2rem;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.contact-lien {
   color: inherit;
 }
 
@@ -88,7 +102,7 @@ body.awesome h1 {
   text-align: center;
 }
 
-/* Cartes des projets : la teinte de chaque carte vient de --teinte. */
+/* Cartes des projets : couleurs posées par le JS dans --fond et --texte. */
 #projets {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
@@ -100,7 +114,8 @@ body.awesome h1 {
 }
 
 #projets li {
-  --teinte: 210;
+  --fond: #f2cd37;
+  --texte: #05131d;
 }
 
 #projets a {
@@ -110,10 +125,10 @@ body.awesome h1 {
   box-sizing: border-box;
   height: 100%;
   padding: 1.25rem;
-  border-top: 0.4rem solid hsl(var(--teinte) 70% 50%);
+  border: 0.15rem solid #05131d;
   border-radius: 1rem;
-  background: hsl(var(--teinte) 80% 94%);
-  color: hsl(var(--teinte) 60% 20%);
+  background: var(--fond);
+  color: var(--texte);
   text-decoration: none;
   transition:
     transform 0.2s,
@@ -123,7 +138,7 @@ body.awesome h1 {
 #projets a:hover,
 #projets a:focus-visible {
   transform: translateY(-0.25rem) rotate(-1deg);
-  box-shadow: 0 0.75rem 1.5rem hsl(var(--teinte) 50% 30% / 25%);
+  box-shadow: 0 0.75rem 1.5rem rgb(5 19 29 / 30%);
 }
 
 .carte-nom {
