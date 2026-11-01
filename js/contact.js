@@ -3,7 +3,7 @@
 // affichés qu'au clic, ce que les robots collecteurs ne font pas.
 export const CONTACTS = {
   email: 'cmYuZWxibWVzbmVlenVvZEB0Y2F0bm9j',
-  telephone: 'MDAgMDAgMDAgMDAgMDA=',
+  telephone: 'OTIgMTAgNDkgNTIgNTA=',
 };
 
 export function decode(encoded) {
