@@ -2,10 +2,29 @@ export const PROFILE_URL = 'https://github.com/RenaudDouze';
 export const REPOS_URL =
   'https://api.github.com/users/RenaudDouze/repos?sort=pushed&per_page=100';
 export const LIMIT = 6;
+export const PAGES_HOST = 'renauddouze.github.io';
 
-// Derniers projets mis à jour, sans les forks ni les dépôts archivés.
+// Adresse où le projet est publié : son site déclaré sur GitHub, sinon sa
+// page GitHub Pages. null quand le projet n'est publié nulle part.
+export function publishedUrl(repo) {
+  if (repo.homepage) {
+    return /^https?:\/\//.test(repo.homepage)
+      ? repo.homepage
+      : `https://${repo.homepage}`;
+  }
+  if (repo.has_pages) {
+    return repo.name.toLowerCase() === PAGES_HOST
+      ? `https://${PAGES_HOST}/`
+      : `https://${PAGES_HOST}/${repo.name}/`;
+  }
+  return null;
+}
+
+// Derniers projets publiés, sans les forks ni les dépôts archivés.
 export function selectProjects(repos, limit) {
-  return repos.filter((repo) => !repo.fork && !repo.archived).slice(0, limit);
+  return repos
+    .filter((repo) => !repo.fork && !repo.archived && publishedUrl(repo))
+    .slice(0, limit);
 }
 
 export function renderProjects(list, projects) {
@@ -14,7 +33,7 @@ export function renderProjects(list, projects) {
     ...projects.map((project) => {
       const item = doc.createElement('li');
       const link = doc.createElement('a');
-      link.href = project.html_url;
+      link.href = publishedUrl(project);
       link.textContent = project.name;
       item.append(link);
       if (project.description) {

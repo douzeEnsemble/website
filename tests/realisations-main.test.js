@@ -5,7 +5,7 @@ it('charge les projets au chargement de la page', async () => {
   const fetchFn = vi.fn().mockResolvedValue({
     ok: true,
     json: async () => [
-      { name: 'site', html_url: 'https://github.com/RenaudDouze/site' },
+      { name: 'site', homepage: 'https://site.example' },
     ],
   });
   window.fetch = fetchFn;

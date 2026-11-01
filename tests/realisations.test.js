@@ -1,9 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   LIMIT,
+  PAGES_HOST,
   PROFILE_URL,
   REPOS_URL,
   loadProjects,
+  publishedUrl,
   renderProjects,
   selectProjects,
 } from '../js/realisations.js';
@@ -14,6 +16,8 @@ const repo = (name, extra = {}) => ({
   name,
   html_url: `https://github.com/RenaudDouze/${name}`,
   description: null,
+  homepage: `https://${name}.example`,
+  has_pages: false,
   fork: false,
   archived: false,
   ...extra,
@@ -36,16 +40,59 @@ describe('constantes', () => {
       'https://api.github.com/users/RenaudDouze/repos?sort=pushed&per_page=100',
     );
     expect(LIMIT).toBe(6);
+    expect(PAGES_HOST).toBe('renauddouze.github.io');
+  });
+});
+
+describe('publishedUrl', () => {
+  it('prend le site déclaré sur GitHub', () => {
+    expect(publishedUrl(repo('a', { has_pages: true }))).toBe(
+      'https://a.example',
+    );
+  });
+
+  it('accepte un site en http', () => {
+    expect(publishedUrl(repo('a', { homepage: 'http://a.example' }))).toBe(
+      'http://a.example',
+    );
+  });
+
+  it('ajoute https quand le site n’a pas de protocole', () => {
+    expect(publishedUrl(repo('a', { homepage: 'a.example' }))).toBe(
+      'https://a.example',
+    );
+    expect(publishedUrl(repo('a', { homepage: 'x.fr/https://' }))).toBe(
+      'https://x.fr/https://',
+    );
+  });
+
+  it('prend la page GitHub Pages sans site déclaré', () => {
+    expect(publishedUrl(repo('Jeu', { homepage: '', has_pages: true }))).toBe(
+      'https://renauddouze.github.io/Jeu/',
+    );
+  });
+
+  it('prend la racine pour le dépôt du site utilisateur', () => {
+    expect(
+      publishedUrl(
+        repo('RenaudDouze.github.io', { homepage: null, has_pages: true }),
+      ),
+    ).toBe('https://renauddouze.github.io/');
+  });
+
+  it('renvoie null pour un projet non publié', () => {
+    expect(publishedUrl(repo('a', { homepage: null }))).toBeNull();
   });
 });
 
 describe('selectProjects', () => {
-  it('écarte les forks et les dépôts archivés', () => {
+  it('écarte les forks, les dépôts archivés et les projets non publiés', () => {
     const repos = [
       repo('a'),
       repo('fork', { fork: true }),
       repo('archive', { archived: true }),
-      repo('b'),
+      repo('prive', { homepage: null }),
+      repo('b', { homepage: null, has_pages: true }),
     ];
     expect(selectProjects(repos, 10).map((r) => r.name)).toEqual(['a', 'b']);
   });
@@ -57,14 +104,14 @@ describe('selectProjects', () => {
 });
 
 describe('renderProjects', () => {
-  it('affiche un lien par projet, avec sa description', () => {
+  it('affiche un lien vers chaque page publiée, avec sa description', () => {
     renderProjects(list, [
       repo('site', { description: 'Le site' }),
-      repo('outil'),
+      repo('outil', { homepage: null, has_pages: true }),
     ]);
     expect(list.innerHTML).toBe(
-      '<li><a href="https://github.com/RenaudDouze/site">site</a> <span>Le site</span></li>' +
-        '<li><a href="https://github.com/RenaudDouze/outil">outil</a></li>',
+      '<li><a href="https://site.example">site</a> <span>Le site</span></li>' +
+        '<li><a href="https://renauddouze.github.io/outil/">outil</a></li>',
     );
   });
 
@@ -96,7 +143,10 @@ describe('loadProjects', () => {
   });
 
   it('garde le lien vers le profil sans projet à afficher', async () => {
-    await loadProjects(respond([repo('f', { fork: true })]), list);
+    await loadProjects(
+      respond([repo('f', { fork: true }), repo('p', { homepage: null })]),
+      list,
+    );
     expect(list.innerHTML).toBe(FALLBACK);
   });
 
