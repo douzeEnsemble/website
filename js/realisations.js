@@ -59,6 +59,14 @@ export function renderProjects(list, projects) {
       if (project.description) {
         link.append(element('p', 'carte-description', project.description));
       }
+      const topics = project.topics ?? [];
+      if (topics.length > 0) {
+        const tags = element('span', 'carte-topics', '');
+        tags.append(
+          ...topics.map((topic) => element('span', 'carte-topic', topic)),
+        );
+        link.append(tags);
+      }
       const infos = [new URL(url).host, project.language].filter(Boolean);
       link.append(element('span', 'carte-infos', infos.join(' · ')));
       item.append(link);
