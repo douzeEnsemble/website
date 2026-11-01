@@ -8,7 +8,9 @@ import {
   publishedUrl,
   renderProjects,
   selectProjects,
+  textColor,
 } from '../js/realisations.js';
+import { AWESOME_COLORS } from '../js/site.js';
 
 const FALLBACK = `<li><a href="${PROFILE_URL}">Les projets sur GitHub</a></li>`;
 
@@ -85,6 +87,28 @@ describe('publishedUrl', () => {
   });
 });
 
+describe('textColor', () => {
+  it('met du texte sombre sur les couleurs claires', () => {
+    expect(textColor('#ffffff')).toBe('#05131d');
+    expect(textColor('#f2cd37')).toBe('#05131d');
+    expect(textColor('#9a9a9a')).toBe('#05131d');
+  });
+
+  it('met du texte blanc sur les couleurs foncées', () => {
+    expect(textColor('#05131d')).toBe('#ffffff');
+    expect(textColor('#999999')).toBe('#ffffff');
+  });
+
+  it('tient compte de chaque composante', () => {
+    expect(textColor('#ff0000')).toBe('#ffffff');
+    expect(textColor('#00ff00')).toBe('#ffffff');
+    expect(textColor('#ffff00')).toBe('#05131d');
+    expect(textColor('#00ffff')).toBe('#05131d');
+    expect(textColor('#ff00ff')).toBe('#ffffff');
+    expect(textColor('#d0d0ff')).toBe('#05131d');
+  });
+});
+
 describe('selectProjects', () => {
   it('écarte les forks, les dépôts archivés et les projets non publiés', () => {
     const repos = [
@@ -110,21 +134,23 @@ describe('renderProjects', () => {
       repo('outil', { homepage: null, has_pages: true }),
     ]);
     expect(list.innerHTML).toBe(
-      '<li style="--teinte: 0;"><a href="https://site.example">' +
+      '<li style="--fond: #05131d; --texte: #ffffff;"><a href="https://site.example">' +
         '<strong class="carte-nom">site</strong>' +
         '<p class="carte-description">Le site</p>' +
         '<span class="carte-infos">site.example · JavaScript</span></a></li>' +
-        '<li style="--teinte: 180;"><a href="https://renauddouze.github.io/outil/">' +
+        '<li style="--fond: #582a12; --texte: #ffffff;"><a href="https://renauddouze.github.io/outil/">' +
         '<strong class="carte-nom">outil</strong>' +
         '<span class="carte-infos">renauddouze.github.io</span></a></li>',
     );
   });
 
-  it('répartit les teintes sur le cercle chromatique, arrondies', () => {
-    renderProjects(list, [...'abcdefg'].map((name) => repo(name)));
-    expect(
-      [...list.children].map((li) => li.style.getPropertyValue('--teinte')),
-    ).toEqual(['0', '51', '103', '154', '206', '257', '309']);
+  it('reprend les couleurs Everyone is awesome dans l’ordre, en boucle', () => {
+    renderProjects(list, Array.from({ length: 13 }, (_, i) => repo(`p${i}`)));
+    const fonds = [...list.children].map((li) =>
+      li.style.getPropertyValue('--fond'),
+    );
+    expect(fonds).toEqual([...AWESOME_COLORS, ...AWESOME_COLORS.slice(0, 2)]);
+    expect(list.children[4].style.getPropertyValue('--texte')).toBe('#05131d');
   });
 
   it('n’interprète pas le HTML des descriptions', () => {
