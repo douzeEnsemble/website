@@ -144,6 +144,22 @@ describe('renderProjects', () => {
     );
   });
 
+  it('affiche les topics GitHub du projet', () => {
+    renderProjects(list, [repo('a', { topics: ['pwa', 'react'] })]);
+    expect(list.querySelector('.carte-topics').outerHTML).toBe(
+      '<span class="carte-topics">' +
+        '<span class="carte-topic">pwa</span>' +
+        '<span class="carte-topic">react</span></span>',
+    );
+    const tags = list.querySelector('.carte-topics');
+    expect(tags.nextElementSibling.className).toBe('carte-infos');
+  });
+
+  it('n’affiche pas de topics quand la liste est vide', () => {
+    renderProjects(list, [repo('a', { topics: [] })]);
+    expect(list.querySelector('.carte-topics')).toBeNull();
+  });
+
   it('reprend les couleurs Everyone is awesome dans l’ordre, en boucle', () => {
     renderProjects(list, Array.from({ length: 13 }, (_, i) => repo(`p${i}`)));
     const fonds = [...list.children].map((li) =>
