@@ -102,7 +102,7 @@ body.awesome h1 {
   text-align: center;
 }
 
-/* Cartes des projets : couleurs posées par le JS dans --fond et --texte. */
+/* Cartes des projets : style sobre, les couleurs restent pour le Konami code. */
 #projets {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
@@ -113,11 +113,6 @@ body.awesome h1 {
   text-align: left;
 }
 
-#projets li {
-  --fond: #f2cd37;
-  --texte: #05131d;
-}
-
 #projets a {
   display: flex;
   flex-direction: column;
@@ -125,20 +120,22 @@ body.awesome h1 {
   box-sizing: border-box;
   height: 100%;
   padding: 1.25rem;
-  border: 0.15rem solid #05131d;
-  border-radius: 1rem;
-  background: var(--fond);
-  color: var(--texte);
+  border: 0.0625rem solid #d5d8dc;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #05131d;
   text-decoration: none;
   transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 
 #projets a:hover,
 #projets a:focus-visible {
-  transform: translateY(-0.25rem) rotate(-1deg);
-  box-shadow: 0 0.75rem 1.5rem rgb(5 19 29 / 30%);
+  border-color: #05131d;
+  box-shadow: 0 0.5rem 1.25rem rgb(5 19 29 / 12%);
+  transform: translateY(-0.15rem);
 }
 
 .carte-nom {
@@ -148,7 +145,8 @@ body.awesome h1 {
 .carte-description {
   flex-grow: 1;
   margin: 0;
-  opacity: 0.85;
+  color: #3d4650;
+  line-height: 1.45;
 }
 
 .carte-topics {
@@ -159,14 +157,15 @@ body.awesome h1 {
 
 .carte-topic {
   padding: 0.15em 0.6em;
-  border: 0.1rem solid currentcolor;
   border-radius: 1rem;
+  background: #eef0f2;
+  color: #3d4650;
   font-size: 0.75rem;
 }
 
 .carte-infos {
+  color: #6b7480;
   font-size: 0.8rem;
-  opacity: 0.7;
 }
 
 .prestations {
@@ -186,7 +185,7 @@ body.awesome h1 {
   font-size: 1.15rem;
 }
 
-/* Une carte par prestation, aux couleurs arc-en-ciel du set Everyone is awesome. */
+/* Une carte par prestation, dans le même style sobre que les réalisations. */
 .prestations-liste {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
@@ -200,32 +199,20 @@ body.awesome h1 {
 .prestation {
   position: relative;
   padding: 1.5rem;
-  border: 0.15rem solid #05131d;
-  border-radius: 1rem;
-  background: #c91a09;
-  color: #fff;
-}
-
-.prestation:nth-child(2) {
-  background: #fe8a18;
+  border: 0.0625rem solid #d5d8dc;
+  border-top: 0.25rem solid #05131d;
+  border-radius: 0.75rem;
+  background: #fff;
   color: #05131d;
-}
-
-.prestation:nth-child(3) {
-  background: #4b9f4a;
-}
-
-.prestation:nth-child(4) {
-  background: #0055bf;
 }
 
 .prestation-numero {
   position: absolute;
   top: 1rem;
   right: 1.25rem;
+  color: #c3c8ce;
   font-size: 2.5rem;
   font-weight: bold;
-  opacity: 0.3;
 }
 
 .prestation h2 {
@@ -235,6 +222,7 @@ body.awesome h1 {
 
 .prestation p {
   margin: 0 0 1rem;
+  color: #3d4650;
   line-height: 1.45;
 }
 
@@ -245,15 +233,11 @@ body.awesome h1 {
 }
 
 .prestation-point {
-  padding: 0.3rem 0 0.3rem 1.4rem;
-  border-top: 0.1rem solid rgb(255 255 255 / 25%);
-  background: no-repeat left 0.75em / 0.6rem 0.6rem
-    radial-gradient(circle, currentcolor 45%, transparent 50%);
+  padding: 0.35rem 0 0.35rem 1.4rem;
+  border-top: 0.0625rem solid #eef0f2;
+  background: no-repeat left 0.8em / 0.5rem 0.5rem
+    radial-gradient(circle, #05131d 45%, transparent 50%);
   font-size: 0.95rem;
-}
-
-.prestation:nth-child(2) .prestation-point {
-  border-top-color: rgb(5 19 29 / 20%);
 }
 
 .prestations-contact {
@@ -263,16 +247,16 @@ body.awesome h1 {
 .prestations-cta {
   display: inline-block;
   padding: 0.6em 1.4em;
-  border: 0.15rem solid #05131d;
+  border: 0.125rem solid #05131d;
   border-radius: 2rem;
-  background: #f2cd37;
-  color: #05131d;
+  background: #05131d;
+  color: #fff;
   font-weight: bold;
   text-decoration: none;
 }
 
 .prestations-cta:hover,
 .prestations-cta:focus-visible {
-  background: #05131d;
-  color: #f2cd37;
+  background: #fff;
+  color: #05131d;
 }
