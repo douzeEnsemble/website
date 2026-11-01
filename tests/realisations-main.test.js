@@ -11,7 +11,7 @@ it('charge les projets au chargement de la page', async () => {
   window.fetch = fetchFn;
   await import('../js/realisations-main.js');
   await vi.waitFor(() =>
-    expect(document.querySelector('#projets a').textContent).toBe('site'),
+    expect(document.querySelector('#projets .carte-nom').textContent).toBe('site'),
   );
   expect(fetchFn.mock.contexts[0]).toBe(window);
 });

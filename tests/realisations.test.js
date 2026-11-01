@@ -104,21 +104,33 @@ describe('selectProjects', () => {
 });
 
 describe('renderProjects', () => {
-  it('affiche un lien vers chaque page publiée, avec sa description', () => {
+  it('affiche une carte par projet publié', () => {
     renderProjects(list, [
-      repo('site', { description: 'Le site' }),
+      repo('site', { description: 'Le site', language: 'JavaScript' }),
       repo('outil', { homepage: null, has_pages: true }),
     ]);
     expect(list.innerHTML).toBe(
-      '<li><a href="https://site.example">site</a> <span>Le site</span></li>' +
-        '<li><a href="https://renauddouze.github.io/outil/">outil</a></li>',
+      '<li style="--teinte: 0;"><a href="https://site.example">' +
+        '<strong class="carte-nom">site</strong>' +
+        '<p class="carte-description">Le site</p>' +
+        '<span class="carte-infos">site.example · JavaScript</span></a></li>' +
+        '<li style="--teinte: 180;"><a href="https://renauddouze.github.io/outil/">' +
+        '<strong class="carte-nom">outil</strong>' +
+        '<span class="carte-infos">renauddouze.github.io</span></a></li>',
     );
+  });
+
+  it('répartit les teintes sur le cercle chromatique, arrondies', () => {
+    renderProjects(list, [...'abcdefg'].map((name) => repo(name)));
+    expect(
+      [...list.children].map((li) => li.style.getPropertyValue('--teinte')),
+    ).toEqual(['0', '51', '103', '154', '206', '257', '309']);
   });
 
   it('n’interprète pas le HTML des descriptions', () => {
     renderProjects(list, [repo('x', { description: '<b>gras</b>' })]);
     expect(list.querySelector('b')).toBeNull();
-    expect(list.querySelector('span').textContent).toBe('<b>gras</b>');
+    expect(list.querySelector('p').textContent).toBe('<b>gras</b>');
   });
 });
 
@@ -128,9 +140,9 @@ describe('loadProjects', () => {
     const fetchFn = respond(repos);
     await loadProjects(fetchFn, list);
     expect(fetchFn).toHaveBeenCalledWith(REPOS_URL);
-    expect([...list.querySelectorAll('a')].map((a) => a.textContent)).toEqual(
-      ['p0', 'p1', 'p2', 'p3', 'p4', 'p5'],
-    );
+    expect(
+      [...list.querySelectorAll('.carte-nom')].map((el) => el.textContent),
+    ).toEqual(['p0', 'p1', 'p2', 'p3', 'p4', 'p5']);
   });
 
   it('garde le lien vers le profil si GitHub répond en erreur', async () => {
