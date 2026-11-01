@@ -27,20 +27,30 @@ export function selectProjects(repos, limit) {
     .slice(0, limit);
 }
 
+// Une carte par projet, chacune d'une teinte différente du cercle chromatique.
 export function renderProjects(list, projects) {
   const doc = list.ownerDocument;
+  const step = 360 / projects.length;
+  const element = (tag, className, text) => {
+    const el = doc.createElement(tag);
+    el.className = className;
+    el.textContent = text;
+    return el;
+  };
   list.replaceChildren(
-    ...projects.map((project) => {
+    ...projects.map((project, i) => {
+      const url = publishedUrl(project);
       const item = doc.createElement('li');
+      item.style.setProperty('--teinte', String(Math.round(i * step)));
       const link = doc.createElement('a');
-      link.href = publishedUrl(project);
-      link.textContent = project.name;
-      item.append(link);
+      link.href = url;
+      link.append(element('strong', 'carte-nom', project.name));
       if (project.description) {
-        const description = doc.createElement('span');
-        description.textContent = project.description;
-        item.append(' ', description);
+        link.append(element('p', 'carte-description', project.description));
       }
+      const infos = [new URL(url).host, project.language].filter(Boolean);
+      link.append(element('span', 'carte-infos', infos.join(' · ')));
+      item.append(link);
       return item;
     }),
   );
