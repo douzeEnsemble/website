@@ -1,10 +1,10 @@
 import { AWESOME_COLORS } from './site.js';
 
-export const PROFILE_URL = 'https://github.com/RenaudDouze';
+export const PROFILE_URL = 'https://github.com/douzeEnsemble';
 export const REPOS_URL =
-  'https://api.github.com/users/RenaudDouze/repos?sort=pushed&per_page=100';
+  'https://api.github.com/users/douzeEnsemble/repos?sort=pushed&per_page=100';
 export const LIMIT = 6;
-export const PAGES_HOST = 'renauddouze.github.io';
+export const PAGES_HOST = 'douzeensemble.github.io';
 
 // Adresse où le projet est publié : son site déclaré sur GitHub, sinon sa
 // page GitHub Pages. null quand le projet n'est publié nulle part.

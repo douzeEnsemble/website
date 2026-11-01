@@ -16,7 +16,7 @@ const FALLBACK = `<li><a href="${PROFILE_URL}">Les projets sur GitHub</a></li>`;
 
 const repo = (name, extra = {}) => ({
   name,
-  html_url: `https://github.com/RenaudDouze/${name}`,
+  html_url: `https://github.com/douzeEnsemble/${name}`,
   description: null,
   homepage: `https://${name}.example`,
   has_pages: false,
@@ -36,13 +36,13 @@ beforeEach(() => {
 });
 
 describe('constantes', () => {
-  it('vise le profil RenaudDouze, trié par dernière mise à jour', () => {
-    expect(PROFILE_URL).toBe('https://github.com/RenaudDouze');
+  it('vise l’organisation douzeEnsemble, trié par dernière mise à jour', () => {
+    expect(PROFILE_URL).toBe('https://github.com/douzeEnsemble');
     expect(REPOS_URL).toBe(
-      'https://api.github.com/users/RenaudDouze/repos?sort=pushed&per_page=100',
+      'https://api.github.com/users/douzeEnsemble/repos?sort=pushed&per_page=100',
     );
     expect(LIMIT).toBe(6);
-    expect(PAGES_HOST).toBe('renauddouze.github.io');
+    expect(PAGES_HOST).toBe('douzeensemble.github.io');
   });
 });
 
@@ -70,16 +70,16 @@ describe('publishedUrl', () => {
 
   it('prend la page GitHub Pages sans site déclaré', () => {
     expect(publishedUrl(repo('Jeu', { homepage: '', has_pages: true }))).toBe(
-      'https://renauddouze.github.io/Jeu/',
+      'https://douzeensemble.github.io/Jeu/',
     );
   });
 
   it('prend la racine pour le dépôt du site utilisateur', () => {
     expect(
       publishedUrl(
-        repo('RenaudDouze.github.io', { homepage: null, has_pages: true }),
+        repo('douzeEnsemble.github.io', { homepage: null, has_pages: true }),
       ),
-    ).toBe('https://renauddouze.github.io/');
+    ).toBe('https://douzeensemble.github.io/');
   });
 
   it('renvoie null pour un projet non publié', () => {
@@ -138,9 +138,9 @@ describe('renderProjects', () => {
         '<strong class="carte-nom">site</strong>' +
         '<p class="carte-description">Le site</p>' +
         '<span class="carte-infos">site.example · JavaScript</span></a></li>' +
-        '<li style="--fond: #582a12; --texte: #ffffff;"><a href="https://renauddouze.github.io/outil/">' +
+        '<li style="--fond: #582a12; --texte: #ffffff;"><a href="https://douzeensemble.github.io/outil/">' +
         '<strong class="carte-nom">outil</strong>' +
-        '<span class="carte-infos">renauddouze.github.io</span></a></li>',
+        '<span class="carte-infos">douzeensemble.github.io</span></a></li>',
     );
   });
 
