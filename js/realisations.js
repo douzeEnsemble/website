@@ -27,53 +27,65 @@ export function selectProjects(repos, limit) {
     .slice(0, limit);
 }
 
-// Une carte par projet.
-export function renderProjects(list, projects) {
-  const doc = list.ownerDocument;
-  const element = (tag, className, text) => {
-    const el = doc.createElement(tag);
-    el.className = className;
-    el.textContent = text;
-    return el;
-  };
-  list.replaceChildren(
-    ...projects.map((project) => {
-      const url = publishedUrl(project);
-      const item = doc.createElement('li');
-      const link = doc.createElement('a');
-      link.href = url;
-      link.append(element('strong', 'carte-nom', project.name));
-      if (project.description) {
-        link.append(element('p', 'carte-description', project.description));
-      }
-      const topics = project.topics ?? [];
-      if (topics.length > 0) {
-        const tags = element('span', 'carte-topics', '');
-        tags.append(
-          ...topics.map((topic) => element('span', 'carte-topic', topic)),
-        );
-        link.append(tags);
-      }
-      const infos = [new URL(url).host, project.language].filter(Boolean);
-      link.append(element('span', 'carte-infos', infos.join(' · ')));
-      item.append(link);
-      return item;
-    }),
+export const MARKER_START = '<!-- projets:debut -->';
+export const MARKER_END = '<!-- projets:fin -->';
+
+export function escapeHtml(text) {
+  return String(text)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
+}
+
+// Une carte par projet, en HTML statique.
+export function projectCard(project) {
+  const url = publishedUrl(project);
+  const parts = [
+    `<strong class="carte-nom">${escapeHtml(project.name)}</strong>`,
+  ];
+  if (project.description) {
+    parts.push(
+      `<p class="carte-description">${escapeHtml(project.description)}</p>`,
+    );
+  }
+  const topics = project.topics ?? [];
+  if (topics.length > 0) {
+    const tags = topics
+      .map((topic) => `<span class="carte-topic">${escapeHtml(topic)}</span>`)
+      .join('');
+    parts.push(`<span class="carte-topics">${tags}</span>`);
+  }
+  const infos = [new URL(url).host, project.language].filter(Boolean);
+  parts.push(`<span class="carte-infos">${escapeHtml(infos.join(' · '))}</span>`);
+  return `<li><a href="${escapeHtml(url)}">${parts.join('')}</a></li>`;
+}
+
+// Remplace le contenu entre les marqueurs de la page par les cartes.
+export function injectProjects(html, projects) {
+  const start = html.indexOf(MARKER_START);
+  const end = html.indexOf(MARKER_END, start);
+  if (start === -1 || end === -1) {
+    throw new Error('Marqueurs des projets introuvables');
+  }
+  const cards = projects.map((project) => `\n        ${projectCard(project)}`);
+  return (
+    html.slice(0, start + MARKER_START.length) +
+    cards.join('') +
+    '\n        ' +
+    html.slice(end)
   );
 }
 
-// En cas d'échec, la liste garde son contenu d'origine (le lien vers le profil).
-export async function loadProjects(fetchFn, list) {
-  try {
-    const response = await fetchFn(REPOS_URL);
-    if (!response.ok) {
-      return;
-    }
-    const projects = selectProjects(await response.json(), LIMIT);
-    if (projects.length > 0) {
-      renderProjects(list, projects);
-    }
-  } catch {
-    // Pas de réseau : on garde le lien vers le profil.
+// Récupère les derniers projets publiés depuis l'API GitHub.
+export async function fetchProjects(fetchFn, token) {
+  const headers = { Accept: 'application/vnd.github+json' };
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
   }
+  const response = await fetchFn(REPOS_URL, { headers });
+  if (!response.ok) {
+    throw new Error(`API GitHub : ${response.status}`);
+  }
+  return selectProjects(await response.json(), LIMIT);
 }
